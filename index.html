@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // ""Управление библиотекой книг""
+        // Реализуйте класс Book, представляющий книгу, со следующими свойствами и методами:
+        // Свойство title(название) - строка, название книги.
+        // Свойство author(автор) - строка, имя автора книги.
+        // Свойство pages(количество страниц) - число, количество страниц в книге.
+        // Метод displayInfo() - выводит информацию о книге(название, автор и количество страниц).
+
+        class Book {
+            constructor(title, author, pages) {
+                this.title = title;
+                this.author = author;
+                this.pages = pages;
+            }
+            displayInfo() {
+                console.log(`Название: ${this.title}, Автор: ${this.author}, Количество страниц: ${this.pages}`);
+            }
+        }
+
+        const MyBook = new Book('Мой мир', 'Дима Димов', 123);
+        MyBook.displayInfo();
+
+
+        // ""Управление списком студентов""
+        // Реализуйте класс Student, представляющий студента, со следующими свойствами и методами:
+        // Свойство name(имя) - строка, имя студента.
+        // Свойство age(возраст) - число, возраст студента.
+        // Свойство grade(класс) - строка, класс, в котором учится студент.
+        // Метод displayInfo() - выводит информацию о студенте(имя, возраст и класс).
+
+        // Пример использования класса
+        // const student1 = new Student(""John Smith"", 16, ""10th grade"");
+        // student1.displayInfo();
+        // Вывод:
+        // Name: John Smith
+        // Age: 16
+        // Grade: 10th grade
+
+        // const student2 = new Student(""Jane Doe"", 17, ""11th grade"");
+        // student2.displayInfo();
+        // Вывод:
+        // Name: Jane Doe
+        // Age: 17
+        // Grade: 11th grade"
+
+        class Student {
+            constructor(name, age, grade) {
+                this.name = name;
+                this.age = age;
+                this.grade = grade;
+            }
+            displayInfo() {
+                console.log(`Имя: ${this.name}`);
+                console.log(`Возраст: ${this.age}`);
+                console.log(`Класс: ${this.grade}`);
+            }
+        }
+
+        const student1 = new Student('Дима Димов', 16, '10-й');
+        student1.displayInfo();
+        const student2 = new Student('Катя Катина', 17, '11-й');
+        student2.displayInfo();
+
+
+        // Это расширенная версия задачи с банком, которую мы решлали на семинаре:
+        // Создайте класс "Банк", который будет иметь следующие свойства: название банка, список клиентов и список счетов.Класс должен иметь методы для добавления нового клиента, открытия нового счета для клиента, пополнения счета, снятия денег со счета и проверки баланса.
+
+        // Пример работы:
+        //     const bank = new Bank("Мой Банк");
+
+        //     const client1 = new Client("Иван", 25);
+        //     const client2 = new Client("Мария", 30);
+
+        //     bank.addClient(client1);
+        //     bank.addClient(client2);
+
+        //     bank.openAccount(client1, 1000);
+        //     bank.openAccount(client2, 500);
+        //     bank.deposit(123456789, 200);
+        //     bank.withdraw(987654321, 100);
+        //     bank.checkBalance(123456789);
+        //     bank.checkBalance(987654321);   
+
+        class Bank {
+            clientList = [];
+            accountList = {};
+            static accountSerialNumber = 123456789;
+
+            constructor(title) {
+                this.title = title;
+            }
+
+            addClient(name, age) {
+                class Client {
+                    constructor(name, age) {
+                        this.name = name;
+                        this.age = age;
+                    }
+                }
+
+                this.clientList.push(new Client(name, age));
+            }
+
+            openAccount(clientName, amount) {
+                class Account {
+                    constructor(client, balance) {
+                        this.client = client;
+                        this.balance = balance;
+                    }
+                }
+
+                for (let client of this.clientList) {
+                    if (client.name === clientName) {
+                        this.accountList[Bank.accountSerialNumber++] = new Account(client, amount);
+                        break;
+                    }
+                }
+            }
+            deposit(accountNumber, amount) {
+                if (this.accountList[accountNumber]) {
+                    this.accountList[accountNumber].balance += +amount;
+                    console.log(`Баланс аккаунта "${accountNumber}" пополнен на ${amount} денег.`);
+                    console.log(`Текущий баланс: ${this.accountList[accountNumber].balance}`);
+                } else {
+                    console.log(`Аккаунта с номером "${accountNumber}" не существует!`);
+                }
+            }
+
+            withdraw(accountNumber, amount) {
+                if (this.accountList[accountNumber]) {
+                    if (this.accountList[accountNumber].balance >= amount) {
+                        this.accountList[accountNumber].balance -= +amount;
+                        console.log(`С баланса аккаунта "${accountNumber}" списано ${amount} денег.`);
+                        console.log(`Текущий баланс: ${this.accountList[accountNumber].balance}`);
+                    } else {
+                        console.log(`На балансе аккаунта "${accountNumber}" недостаточно средств для списания!`);
+                        console.log(`Текущий баланс: ${this.accountList[accountNumber].balance}`);
+                        console.log(`Сумма к списанию: ${amount}`);
+                    }
+                } else {
+                    console.log(`Аккаунта с номером "${accountNumber}" не существует!`);
+                }
+            }
+
+            checkBalance(clientName) {
+                console.log(`Счета клиента с именем "${clientName}":`)
+                let count = 0;
+                for (let value in this.accountList) {
+                    if (this.accountList[value].client.name === clientName) {
+                        console.log(`Баланс счета "${value}": ${this.accountList[value].balance}`);
+                        count++
+                    };
+                }
+                if (count === 0) {
+                    console.log('Отсутствуют');
+                }
+            }
+        }
+
+        const bank = new Bank("ДК-Банк");
+
+        bank.addClient('Дима', 34);
+        bank.addClient('Катя', 35);
+        bank.addClient('Барбоссо', 1);
+
+        bank.openAccount('Дима', 1000);
+        bank.openAccount('Дима', 1000);
+        bank.openAccount('Дима', 1000);
+        bank.openAccount('Катя', 500);
+
+        bank.deposit('123456789', 200);
+        bank.withdraw('123456790', 100);
+        bank.withdraw('123456791', 10000);
+
+        bank.checkBalance('Дима');
+        bank.checkBalance('Катя');
+        bank.checkBalance('Барбоссо');
+
+    </script>
+</body>
+
+</html>
